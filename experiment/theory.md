@@ -20,12 +20,12 @@ The electric field within the depletion region is directed from the n-type to th
 4\. Charge Carrier Concentrations
 ---------------------------------
 
-Outside the depletion region, the charge carrier concentrations are equal to the doping levels of the p-type and n-type materials. In the p-type region, the carrier concentration is approximately the acceptor concentration ($$N_A$$), while in the n-type region, it is approximately the donor concentration ($$N_D$$).
+Outside the depletion region, the charge carrier concentrations are equal to the doping levels of the p-type and n-type materials. In the p-type region, the carrier concentration is approximately the acceptor concentration (N<sub>A</sub>), while in the n-type region, it is approximately the donor concentration (N<sub>D</sub>).
 
 5\. Depletion Width
 -------------------
 
-The depletion width,$$W$$, is the distance over which the electric field extends in the depletion region. It can be determined from the charge density and the built-in potential. The width varies with the doping concentrations of the p-type and n-type materials and affects the junction's electrical characteristics.
+The depletion width, W, is the distance over which the electric field extends in the depletion region. It can be determined from the charge density and the built-in potential. The width varies with the doping concentrations of the p-type and n-type materials and affects the junction's electrical characteristics.
 
 6\. Electrical Characteristics
 ------------------------------
@@ -49,7 +49,7 @@ In an abrupt pn junction, the doping concentration changes abruptly from p-type 
 
 In the depletion approximation, the region around the pn junction where the doping changes is called the depletion region. Within this region, it is assumed that the majority carriers (holes in the p-type region and electrons in the n-type region) have diffused away, leaving behind a region depleted of free charge carriers. The depletion region is characterized by a width _W_, where the charge carrier densities are very low and the primary contributors to the electric field are the fixed ionized donor and acceptor atoms.
 
-Outside the depletion region, the charge carrier densities are assumed to be equal to the doping concentrations of the respective regions. In the p-type region, the carrier density is approximately equal to the acceptor concentration ($$N_A$$), while in the n-type region, it is approximately equal to the donor concentration ($$N_D$$).
+Outside the depletion region, the charge carrier densities are assumed to be equal to the doping concentrations of the respective regions. In the p-type region, the carrier density is approximately equal to the acceptor concentration (N<sub>A</sub>), while in the n-type region, it is approximately equal to the donor concentration (N<sub>D</sub>).
 
 Due to charge neutrality outside the depletion region, the semiconductor as a whole remains electrically neutral. The charge density distribution in the depletion region can be derived from Poisson's equation and is essential for understanding the junction's electrical properties.
 
@@ -76,11 +76,11 @@ The voltage across the junction is the difference in the electrostatic potential
 
 $$V_{bi} - V= \frac{eN_D x_n^2}{2 \epsilon} + \frac{eN_A x_p^2}{2 \epsilon},$$
 
-where $$V\_{bi}$$ is the built-in voltage. Using the charge neutrality condition $$\\left( N_A|x_p|=N_D|x_n|=N_A (W-|x_n|)=N_D (W-|x_p|) \\right),$$ expressions for $$|x_p|$$ and $$|x\_n|$$ can be obtained,
+where V<sub>bi</sub> is the built-in voltage. Using the charge neutrality condition $$\\left( N_A|x_p|=N_D|x_n|=N_A (W-|x_n|)=N_D (W-|x_p|) \\right),$$ expressions for |x<sub>p</sub>| and |x<sub>n<sub>| can be obtained,
 
 $$|x_p| = \frac{N_DW}{N_A+N_D}, \\\\ |x_n| = \frac{N_AW}{N_A+N_D}.$$
 
-Substituting these expressions into the formula for $$V_{bi}$$ - V and solving for $$W$$ yields,
+Substituting these expressions into the formula for V<sub>bi</sub> - V and solving for W yields,
 
 $$W= \sqrt{\frac{2\epsilon(N_D+N_A)(V_{bi}-V)}{eN_DN_A}}.$$
 $$\\vec{j}\_{n,\\text{drift}}= ne\\mu\_n\\vec{E},  \\vec{j}\_{p,\\text{drift}}= pe\\mu\_p\\vec{E}, $$ 
