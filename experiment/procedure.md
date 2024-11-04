@@ -20,8 +20,8 @@ Procedure
     *   Connect the pn junction diode in the circuit with the power supply and multimeter as shown in the diagram.
     *   Ensure the connections are secure and correct.
 2.  **Set Initial Parameters:**
-    *   Set the acceptor concentration in the p-region ($$N_A$$) to a desired value (e.g., 1e15 /cm^3).
-    *   Set the donor concentration in the n-region ($$N_D$$) to a desired value (e.g., 1e15 /cm^3).
+    *   Set the acceptor concentration in the p-region (N<sub>A</sub>) to a desired value (e.g., 1e15 /cm^3).
+    *   Set the donor concentration in the n-region (N<sub>D</sub>) to a desired value (e.g., 1e15 /cm^3).
     *   Adjust the applied voltage (V) to a specific value (e.g., -0.5 V).
     *   Set the temperature (T) to a specific value (e.g., 300 K).
 3.  **Apply the Parameters:**
@@ -38,7 +38,7 @@ Procedure
 5.  **Analyze the Data:**
     *   Use the recorded data to analyze the electrical properties of the pn junction:
         *   Calculate the **Depletion Width (W)** using the charge density profile.
-        *   Determine the **Built-in Potential ($$V_{bi}$$)** from the band diagram.
+        *   Determine the **Built-in Potential (V<sub>bi</sub>)** from the band diagram.
         *   Examine the **Electric Field (E)** distribution within the depletion region.
         *   Compare the carrier densities inside and outside the depletion region.
 6.  **Conclude the Experiment:**
