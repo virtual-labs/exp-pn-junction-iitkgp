@@ -1,0 +1,115 @@
+  {
+	  "version": 2.0,
+  "questions": [
+  {
+        "question": "1. What is the primary assumption made in the depletion approximation for a pn junction?",
+        "answers": {
+            "a": "The charge carrier densities are significant within the depletion region.",
+            "b": "The charge carrier densities are negligible within the depletion region.",
+            "c": "The electric field is zero within the depletion region.",
+            "d": "The potential difference is constant within the depletion region."
+        },
+        "correctAnswer": "b",
+        "difficulty": "beginner"
+    },
+    {
+        "question": "2. What defines the depletion width (W) in a pn junction?",
+        "answers": {
+            "a": "The width of the region where the charge carrier densities are zero.",
+            "b": "The width of the region where the electric field is constant.",
+            "c": "The width of the region where the semiconductor is neutral.",
+            "d": "The width of the region where the potential is constant."
+        },
+        "correctAnswer": "a",
+        "difficulty": "beginner"
+    },
+    {
+        "question": "3. What happens to the electric field within the depletion region of a pn junction?",
+        "answers": {
+            "a": "It remains zero.",
+            "b": "It varies linearly.",
+            "c": "It is constant.",
+            "d": "It varies exponentially."
+        },
+        "correctAnswer": "b",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "4. How does the carrier concentration change outside the depletion region in a pn junction?",
+        "answers": {
+            "a": "It remains negligible.",
+            "b": "It is equal to the intrinsic carrier concentration.",
+            "c": "It is equal to the doping concentration.",
+            "d": "It varies linearly."
+        },
+        "correctAnswer": "c",
+        "difficulty": "beginner"
+    },
+    {
+        "question": "5. In the depletion approximation, what is assumed about the semiconductor outside the depletion region?",
+        "answers": {
+            "a": "It is electrically neutral.",
+            "b": "It has a constant electric field.",
+            "c": "It has a constant potential.",
+            "d": "It is fully ionized."
+        },
+        "correctAnswer": "a",
+        "difficulty": "beginner"
+    },
+    {
+        "question": "6. What is the charge density distribution for an abrupt pn junction?",
+        "answers": {
+            "a": "Uniform across the junction.",
+            "b": "Zero in the depletion region.",
+            "c": "A step function changing abruptly at the junction.",
+            "d": "A linear function."
+        },
+        "correctAnswer": "c",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "7. What is the typical shape of the electric field profile in the depletion region of an abrupt pn junction?",
+        "answers": {
+            "a": "Uniform",
+            "b": "Parabolic",
+            "c": "Triangular",
+            "d": "Rectangular"
+        },
+        "correctAnswer": "c",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "8. How is the built-in potential (V_bi) related to the doping concentrations in a pn junction?",
+        "answers": {
+            "a": "It is independent of the doping concentrations.",
+            "b": "It decreases with increasing doping concentrations.",
+            "c": "It increases with increasing doping concentrations.",
+            "d": "It varies linearly with the doping concentrations."
+        },
+        "correctAnswer": "c",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "9. What effect does reverse bias have on the depletion width in a pn junction?",
+        "answers": {
+            "a": "It decreases the depletion width.",
+            "b": "It increases the depletion width.",
+            "c": "It does not affect the depletion width.",
+            "d": "It makes the depletion width constant."
+        },
+        "correctAnswer": "b",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "10. Which parameter is typically used to describe the extent of band bending in a pn junction?",
+        "answers": {
+            "a": "Electric field",
+            "b": "Charge density",
+            "c": "Built-in potential",
+            "d": "Depletion width"
+        },
+        "correctAnswer": "c",
+        "difficulty": "advanced"
+    }
+  ]
+}

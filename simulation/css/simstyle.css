@@ -1,0 +1,58 @@
+
+
+#MathJax_Message {
+  position: fixed;
+  left: 1em;
+  bottom: 1.5em;
+  background-color: #E6E6E6;
+  border: 1px solid #959595;
+  margin: 0;
+  padding: 2px 8px;
+  z-index: 102;
+  color: black;
+  font-size: 80%;
+  width: auto;
+  white-space: nowrap;
+}
+
+.MJX_Assistive_MathML {
+  position: absolute!important;
+  top: 0;
+  left: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0 0 0!important;
+  border: 0!important;
+  height: 1px!important;
+  width: 1px!important;
+  overflow: hidden!important;
+  display: block!important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {
+  width: 100%!important;
+}
+
+
+p {
+  margin-left: 1cm;
+  margin-right: 1cm;
+}
+
+p.t {
+  margin-left: 0cm;
+  margin-right: 0cm;
+}
+
+h2 {
+  margin-left: 1cm;
+}
+
+a {
+  text-decoration: none;
+}
