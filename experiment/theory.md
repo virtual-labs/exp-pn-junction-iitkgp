@@ -76,7 +76,7 @@ The voltage across the junction is the difference in the electrostatic potential
 
 $$V_{bi} - V= \frac{eN_D x_n^2}{2 \epsilon} + \frac{eN_A x_p^2}{2 \epsilon},$$
 
-where V<sub>bi</sub> is the built-in voltage. Using the charge neutrality condition $$\\left( N_A|x_p|=N_D|x_n|=N_A (W-|x_n|)=N_D (W-|x_p|) \\right),$$ expressions for |x<sub>p</sub>| and |x<sub>n<sub>| can be obtained,
+where V<sub>bi</sub> is the built-in voltage. Using the charge neutrality condition $$\\left( N_A|x_p|=N_D|x_n|=N_A (W-|x_n|)=N_D (W-|x_p|) \\right),$$ expressions for |x<sub>p</sub>| and |x<sub>n</sub>| can be obtained,
 
 $$|x_p| = \frac{N_DW}{N_A+N_D}, \\\\ |x_n| = \frac{N_AW}{N_A+N_D}.$$
 
