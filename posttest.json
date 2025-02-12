@@ -1,0 +1,117 @@
+
+  {
+	  "version": 2.0,
+  "questions": [
+    {
+        "question": "1. What is the effect of forward bias on the depletion region of a pn junction?",
+        "answers": {
+            "a": "It increases the depletion width.",
+            "b": "It decreases the depletion width.",
+            "c": "It has no effect on the depletion width.",
+            "d": "It makes the depletion width constant."
+        },
+        "correctAnswer": "b",
+        "difficulty": "beginner"
+    },
+    {
+        "question": "2. In the context of pn junctions, what does the term 'band bending' refer to?",
+        "answers": {
+            "a": "The curvature of the conduction band only.",
+            "b": "The curvature of the valence band only.",
+            "c": "The change in energy levels across the junction.",
+            "d": "The alignment of energy bands at the junction."
+        },
+        "correctAnswer": "c",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "3. Which of the following is true about the potential difference across the depletion region under equilibrium?",
+        "answers": {
+            "a": "It is zero.",
+            "b": "It is equal to the applied bias voltage.",
+            "c": "It is equal to the built-in potential.",
+            "d": "It varies linearly."
+        },
+        "correctAnswer": "c",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "4. What happens to the minority carrier concentration at the edges of the depletion region in a forward-biased pn junction?",
+        "answers": {
+            "a": "It remains constant.",
+            "b": "It decreases.",
+            "c": "It increases.",
+            "d": "It becomes zero."
+        },
+        "correctAnswer": "c",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "5. In a reverse-biased pn junction, what is the dominant current mechanism?",
+        "answers": {
+            "a": "Drift current of majority carriers",
+            "b": "Diffusion current of majority carriers",
+            "c": "Drift current of minority carriers",
+            "d": "Diffusion current of minority carriers"
+        },
+        "correctAnswer": "c",
+        "difficulty": "advanced"
+    },
+    {
+        "question": "6. What is the main reason for the increase in the depletion width under reverse bias?",
+        "answers": {
+            "a": "Increased carrier generation.",
+            "b": "Increased carrier recombination.",
+            "c": "Increased electric field.",
+            "d": "Increased doping concentration."
+        },
+        "correctAnswer": "c",
+        "difficulty": "advanced"
+    },
+    {
+        "question": "7. Which of the following expressions correctly represents the built-in potential (V_bi) for a pn junction?",
+        "answers": {
+            "a": "V_bi = kT/q ln(N_A N_D/n_i^2)",
+            "b": "V_bi = kT/q ln(N_A N_D)",
+            "c": "V_bi = q/kT ln(N_A N_D/n_i^2)",
+            "d": "V_bi = kT/q (N_A N_D/n_i^2)"
+        },
+        "correctAnswer": "a",
+        "difficulty": "advanced"
+    },
+    {
+        "question": "8. What does the term 'space charge region' refer to in a pn junction?",
+        "answers": {
+            "a": "The neutral region outside the depletion width.",
+            "b": "The region with significant free carriers.",
+            "c": "The depletion region with immobile ionized donor and acceptor atoms.",
+            "d": "The region with constant potential."
+        },
+        "correctAnswer": "c",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "9. In a pn junction, what is the relationship between the electric field and the distance within the depletion region?",
+        "answers": {
+            "a": "The electric field is constant throughout the depletion region.",
+            "b": "The electric field increases linearly with distance.",
+            "c": "The electric field decreases linearly with distance.",
+            "d": "The electric field is zero throughout the depletion region."
+        },
+        "correctAnswer": "b",
+        "difficulty": "intermediate"
+    },
+    {
+        "question": "10. How does the recombination rate of electrons and holes in the depletion region of a pn junction compare to that in the neutral regions?",
+        "answers": {
+            "a": "It is higher in the depletion region.",
+            "b": "It is lower in the depletion region.",
+            "c": "It is the same in both regions.",
+            "d": "It varies randomly."
+        },
+        "correctAnswer": "a",
+        "difficulty": "advanced"
+    }
+
+  ]
+}
