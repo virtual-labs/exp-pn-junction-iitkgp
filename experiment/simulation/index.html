@@ -46,7 +46,7 @@
     <!-- jQuery Flot -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flot-tooltip/0.9.0/jquery.flot.tooltip.min.js"></script>
 
 <script language="JavaScript">
 
@@ -118,7 +118,9 @@ function abrupt() {
 
 
 //plot the bands
-  Ev0 = kb*T*Math.log(na/Nv)/echarge-na*xp*xp/(2*eps);
+
+  var Ev0 = kb*T*Math.log(na/Nv)/echarge-na*xp*xp/(2*eps);
+  var x = [], Ev = [], Efn = [], Efp = [], d1 = [], d2 = [], d3 = [], d10 = [];
   for (i=0; i<301; i++) {
     x[i] = (i-150)*2*W3/300;
     if (x[i]<-xp) { Ev[i] = na*xp*xp/(2*eps)+Ev0; }
@@ -140,46 +142,42 @@ function abrupt() {
    d10[i] = [x[i]*1E6,Efp[i]];
   }
 
-    var data1 = [{ data: d1, color: "rgb(0, 0, 0)", shadowSize:0, lines: {show:true}}, { data: d2, color: "rgb(0, 0, 0)", shadowSize:0, lines: {show:true}}, { data: d3, color: "rgb(255, 150, 150)", shadowSize:0, lines: {show:true}, label: "E<sub>Fn</sub>"},{ data: d10, color: "rgb(150, 150, 255)", shadowSize:0, lines: {show:true}, label: "E<sub>Fp</sub>"}]; 
-    $.plot($("#placeholder1"), data1);
+  var options = {
+            series: {
+                lines: { show: true, lineWidth: 2 }
+            },
+            grid: {
+                hoverable: true, 
+                clickable: true,
+                backgroundColor: { colors: ["#fff", "#eee"] },
+                borderWidth: 1,
+                borderColor: "#ccc"
+            },
+            legend: {
+                position: "ne",
+                backgroundOpacity: 0.5
+            },
+            tooltip: {
+                show: true,
+                content: "x: %x µm, y: %y eV",
+                shifts: { x: 10, y: 10 }
+            },
+            xaxis: { tickDecimals: 2, tickFormatter: function(val) { return val.toFixed(2) + " µm"; } },
+            yaxis: { tickFormatter: function(val) { return val.toFixed(2) + " eV"; } }
+        };
+
+        var data1 = [
+            { data: d1, color: "black", lines: { show: true }, label: "Ev" },
+            { data: d2, color: "green", lines: { show: true }, label: "Ev + Eg" },
+            { data: d3, color: "red", lines: { show: true }, label: "E<sub>Fn</sub>" },
+            { data: d10, color: "blue", lines: { show: true }, label: "E<sub>Fp</sub>" }
+        ];
+
+        $.plot($("#placeholder1"), data1, options);
 
 
-//plot charge carrier densities
-  for (i=0; i<301; i++) {
-    n = Nc*Math.exp((Efn[i]-Eg-Ev[i])/(kb*T));
-    p = Nv*Math.exp((Ev[i]-Efp[i])/(kb*T));
-    d4[i]=[x[i]*1E6,Math.log(n)/Math.log(10)-6];
-    d5[i]=[x[i]*1E6,Math.log(p)/Math.log(10)-6];
-    d18[i]=[x[i]*1E6,Math.log(ni)/Math.log(10)-6];
-    d11[i]=[x[i]*1E6,n/na];
-    d12[i]=[x[i]*1E6,p/na];
-    Emax = -echarge*nd*xn/eps;
-    if (x[i] < -xp) { E=0;}
-    else {
-      if (x[i] < 0) {E = -(-xp-x[i])*Emax/xp;}
-      else {
-        if (x[i] < xn) {E = (xn-x[i])*Emax/xn;}
-        else {E = 0;}
-      }
-    }
-    d14[i]=[x[i]*1E6,n*echarge*mun*E*1E-4];
-    d15[i]=[x[i]*1E6,p*echarge*mup*E*1E-4];
-    if (i>0) {
-      d16[i]=[(x[i]+W/300)*1E6,1E-4*echarge*Dn*(n-n_old)*150/W3];
-      d17[i]=[(x[i]+W/300)*1E6,-1E-4*echarge*Dp*(p-p_old)*150/W3];
-    }
-    n_old = n;
-    p_old = p;
-  }
-    var data3 = [{ data: d4, color: "rgb(255, 0, 0)", shadowSize:0, lines: {show:true}, label: "n"}, { data: d5, color: "rgb(0, 0, 255)", shadowSize:0, lines: {show:true}, label: "p"},{ data: d18, color: "rgb(150, 150, 150)", shadowSize:0, lines: {show:true}, label: "ni"}]; 
-    $.plot($("#placeholder2"), data3);
 
-    var data6 = [{ data: d11, color: "rgb(255, 0, 0)", shadowSize:0, lines: {show:true}, label: "n"}, { data: d12, color: "rgb(0, 0, 255)", shadowSize:0, lines: {show:true}, label: "p"}]; 
-    $.plot($("#placeholder6"), data6);
 
-//   current densities
-    var data9 = [{ data: d14, color: "rgb(200, 0, 0)", shadowSize:0, lines: {show:true}, label: "electron drift"}, { data: d15, color: "rgb(0, 0, 200)", shadowSize:0, lines: {show:true}, label: "hole drift"},{ data: d16, color: "rgb(255, 150, 150)", shadowSize:0, lines: {show:true}, label: "electron diffusion"}, { data: d17, color: "rgb(150, 150, 255)", shadowSize:0, lines: {show:true}, label: "hole diffusion"}]; 
-    $.plot($("#placeholderj"), data9);
 
 
 //plot charge density
@@ -193,36 +191,167 @@ function abrupt() {
     d6[6]=[xn*1E6,0];
     d6[7]=[x[300]*1E6,0];
 
-    var data2 = [{ data: d6, color: "rgb(0, 0, 0)", shadowSize:0, lines: {show:true}}]; 
-    $.plot($("#placeholder_rho"), data2);
+   
+    var options = {
+            series: {
+                lines: { show: true, lineWidth: 3 }
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                backgroundColor: { colors: ["#fff", "#f9f9f9"] },
+                borderWidth: 1,
+                borderColor: "#ccc"
+            },
+            tooltip: {
+                show: true,
+                content: function(label, xval, yval) {
+                    return `x: ${xval.toFixed(2)} µm<br>ρ: ${yval.toExponential(2)} C/m³`;
+                },
+                shifts: { x: 10, y: 10 },
+                defaultTheme: false
+            },
+            xaxis: { tickDecimals: 2, tickFormatter: function(val) { return val.toFixed(2) + " µm"; } },
+            yaxis: { tickFormatter: function(val) { return val.toExponential(2) + " C/m³"; } }
+        };
+
+        var data2 = [{ data: d6, color: "#ff6600", lines: { show: true }, label: "Charge Density (ρ)" }];
+
+        $.plot($("#placeholder_rho"), data2, options);
 
 
 //plot electric field
 
-    d7[0]=[x[0]*1E6,0];
-    d7[1]=[-xp*1E6,0];
-    d7[2]=[0,-echarge*nd*xn/eps];
-    d7[3]=[xn*1E6,0];
-    d7[4]=[x[300]*1E6,0];
+// Data points
+d7[0] = [x[0] * 1E6, 0];
+d7[1] = [-xp * 1E6, 0];
+d7[2] = [0, -echarge * nd * xn / eps];
+d7[3] = [xn * 1E6, 0];
+d7[4] = [x[300] * 1E6, 0];
 
-    var data4 = [{ data: d7, color: "rgb(0, 0, 0)", shadowSize:0, lines: {show:true}}]; 
-    $.plot($("#placeholder_e"), data4);
+// Define the dataset
+var data4 = [
+    {
+        data: d7,
+        color: "rgb(0, 0, 0)",
+        shadowSize: 0,
+        lines: { show: true, lineWidth: 2 },
+        points: { show: true, radius: 3, fillColor: "#FF0000" } // Add points for better visibility
+    }
+];
+
+// Plot the data
+$.plot($("#placeholder_e"), data4, {
+    grid: {
+        hoverable: true, // Enable hover
+        clickable: true, // Enable click (optional)
+        borderWidth: 1,
+        backgroundColor: "#F9F9F9" // Light background for better contrast
+    },
+    xaxis: {
+        axisLabel: "x [μm]", // Add axis label
+        axisLabelPadding: 10,
+        tickFormatter: function (val) {
+            return val.toFixed(2); // Format x-axis ticks
+        }
+    },
+    yaxis: {
+        axisLabel: "E [V/m]", // Add axis label
+        axisLabelPadding: 10,
+        tickFormatter: function (val) {
+            return val.toFixed(2); // Format y-axis ticks
+        }
+    },
+    tooltip: true, // Enable tooltip
+    tooltipOpts: {
+        content: "x: %x, y: %y", // Customize tooltip content
+        shifts: {
+            x: 10,
+            y: 20
+        },
+        defaultTheme: false,
+        cssClass: "flot-tooltip" // Add a custom CSS class for styling
+    }
+});
+
+// Add hover functionality
+$("#placeholder_e").bind("plothover", function (event, pos, item) {
+    if (item) {
+        // Highlight the point being hovered over
+        $("#tooltip").html(`x: ${item.datapoint[0].toFixed(2)}, y: ${item.datapoint[1].toFixed(2)}`)
+            .css({ top: item.pageY + 5, left: item.pageX + 5 })
+            .fadeIn(200);
+    } else {
+        $("#tooltip").hide();
+    }
+});
+
+// Add a tooltip element to the page
+$("<div id='tooltip'></div>").css({
+    position: "absolute",
+    display: "none",
+    padding: "5px",
+    backgroundColor: "#FFF",
+    border: "1px solid #CCC",
+    borderRadius: "3px",
+    fontSize: "12px",
+    color: "#733"
+}).appendTo("body");
 
 //plot I-V
-  for (i=0; i<301; i++) {
-    volt = -2+i*3/300;
-    Idiode = 1E-5*(Math.exp(volt/(kb*T)) -1);
-    cap = 1E-4*eps/Math.sqrt(2*eps*(na+nd)*(Vbi-volt)/(echarge*nd*na));  //F/cm^2
-    d8[i]=[volt,Idiode];
-    d13[i] = [volt,1/(1E18*cap*cap)];
-  }
-  Idiode = 1E-5*(Math.exp(V/(kb*T)) -1);
-  d9[0] = [V,Idiode];
-    var data5 = [{ data: d8, color: "rgb(0,0,0)", shadowSize:0, lines: {show:true}}, { data: d9, color: "rgb(255,0,0)", shadowSize:0, points: {show:true}}]; 
-    $.plot($("#placeholderiv"), data5, { yaxis:{ min: -1, max: 1}});
+for (i = 0; i < 301; i++) {
+    volt = -2 + (i * 3) / 300;
+    Idiode = 1E-5 * (Math.exp(volt / (kb * T)) - 1);
+    cap = 1E-4 * eps / Math.sqrt(2 * eps * (na + nd) * (Vbi - volt) / (echarge * nd * na));  // F/cm^2
+    d8[i] = [volt, Idiode];
+    d13[i] = [volt, 1 / (1E18 * cap * cap)];
+}
 
-    var data7 = [{ data: d13, color: "rgb(0,0,0)", shadowSize:0, lines: {show:true}}]; 
-    $.plot($("#placeholdercv"), data7);
+Idiode = 1E-5 * (Math.exp(V / (kb * T)) - 1);
+d9[0] = [V, Idiode];
+
+var data7 = [{ 
+    data: d13, 
+    color: "rgb(0,0,255)", 
+    shadowSize: 0, 
+    lines: { show: true } 
+}];
+
+var plot = $.plot($("#placeholdercv"), data7, {
+    grid: {
+        hoverable: true,  // Enables hover effect
+        borderWidth: 1
+    },
+    xaxis: {
+        axisLabel: "Voltage (V)",
+        tickDecimals: 2
+    },
+    yaxis: {
+        axisLabel: "1/(C²) (F^-2 cm^-4)",
+        tickDecimals: 2
+    }
+});
+
+// Tooltip Setup
+$("<div id='tooltip'></div>").css({
+    position: "absolute",
+    display: "none",
+    border: "1px solid black",
+    padding: "5px",
+    "background-color": "#FFF",
+    opacity: 0.8
+}).appendTo("body");
+
+$("#placeholdercv").bind("plothover", function (event, pos, item) {
+    if (item) {
+        $("#tooltip").html(`Voltage: ${item.datapoint[0].toFixed(3)} V<br>1/(C²): ${item.datapoint[1].toExponential(3)}`)
+            .css({ top: item.pageY + 5, left: item.pageX + 5 })
+            .fadeIn(200);
+    } else {
+        $("#tooltip").hide();
+    }
+});
+
 
 MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
@@ -231,7 +360,94 @@ MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
 </script>
 
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 20px;
+        text-align: center;
+    }
 
+    form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        max-width: 90%;
+        width: 700px;
+    }
+
+  
+
+  
+
+    input[type="text"] {
+        width: 200px;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    input[type="text"]:focus {
+        border-color: #007BFF;
+        outline: none;
+        box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+    }
+
+    input[type="range"] {
+        width: 100%;
+    }
+
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .form-row label {
+        font-weight: bold;
+    }
+
+    .submit-btn {
+        background: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .submit-btn:hover {
+        background: #0056b3;
+    }
+    #placeholder1 {
+            width: 80%;
+            height: 400px;
+            margin: 20px auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #placeholder_rho {
+            width: 80%;
+            height: 400px;
+            margin: 20px auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+</style>
   
   
 </head>
@@ -248,44 +464,44 @@ MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 					
 			<!-- Instructions -->
 			
-			 <div class="container">
+			<div class="container">
         
         
-        <div class="steps">
-            <ol>
-                <li><strong>Set Initial Parameters:</strong>
-                    <ul>
-                        <li><strong>N<sub>A</sub>:</strong> Set the acceptor concentration in the p-region (e.g., 1e15 /cm<sup>3</sup>).</li>
-                        <li><strong>N<sub>D</sub>:</strong> Set the donor concentration in the n-region (e.g., 1e15 /cm<sup>3</sup>).</li>
-                        <li><strong>V:</strong> Adjust the applied voltage (e.g., -0.5 V).</li>
-                        <li><strong>T:</strong> Set the temperature (e.g., 300 K).</li>
-                    </ul>
-                </li>
-                <li><strong>Submit Parameters:</strong>
-                    <ul>
-                        <li>Click the "Submit" button to apply the set parameters.</li>
-                    </ul>
-                </li>
-                <li><strong>View Results:</strong> The simulation will generate the following graphs:
-                    <ul>
-                        <li><strong>Band Diagram:</strong> Displays the energy bands across the pn junction.</li>
-                        <li><strong>Current-Voltage Characteristics:</strong> Shows the I-V curve of the diode.</li>
-                        <li><strong>Charge Density:</strong> Illustrates the charge distribution across the junction.</li>
-                        <li><strong>Electric Field:</strong> Displays the electric field intensity in the depletion region.</li>
-                        <li><strong>Carrier Densities:</strong> Shows the concentration of electrons and holes.</li>
-                        <li><strong>log(Carrier Densities):</strong> Provides a logarithmic view of the carrier concentrations.</li>
-                    </ul>
-                </li>
-                <li><strong>Analyze Data:</strong> Use the graphs to analyze the electrical properties of the pn junction in depletion mode. Note the following:
-                    <ul>
-                        <li><strong>Depletion Width (W):</strong> Measure the width of the depletion region.</li>
-                        <li><strong>Built-in Potential (V<sub>bi</sub>):</strong> Determine the built-in potential of the junction.</li>
-                        <li><strong>Electric Field (E):</strong> Examine the electric field distribution.</li>
-                    </ul>
-                </li>
-            </ol>
-        </div>
-    </div>
+                <div class="steps">
+                    <ol>
+                        <li><strong>Set Initial Parameters:</strong>
+                            <ul>
+                                <li><strong>N<sub>A</sub>:</strong> Set the acceptor concentration in the p-region (e.g., 1e15 /cm<sup>3</sup>).</li>
+                                <li><strong>N<sub>D</sub>:</strong> Set the donor concentration in the n-region (e.g., 1e15 /cm<sup>3</sup>).</li>
+                                <li><strong>V:</strong> Adjust the applied voltage (e.g., -0.5 V).</li>
+                                <li><strong>T:</strong> Set the temperature (e.g., 300 K).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Submit Parameters:</strong>
+                            <ul>
+                                <li>Click the "Submit" button to apply the set parameters.</li>
+                            </ul>
+                        </li>
+                        <li><strong>View Results:</strong> The simulation will generate the following graphs:
+                            <ul>
+                                <li><strong>Band Diagram:</strong> Displays the energy bands across the pn junction.</li>
+                                <li><strong>Capacitance-Voltage Characteristics:</strong> Shows the C-V curve of the diode.</li>
+                                <li><strong>Charge Density:</strong> Illustrates the charge distribution across the junction.</li>
+                                <li><strong>Electric Field:</strong> Displays the electric field intensity in the depletion region.</li>
+                                
+                            </ul>
+                        </li>
+                        <li><strong>Analyze Data:</strong> Use the graphs to analyze the electrical properties of the pn junction in depletion mode. Note the following:
+                            <ul>
+                                <li><strong>Depletion Width (W):</strong> Measure the width of the depletion region.</li>
+                                <li><strong>Built-in Potential (V<sub>bi</sub>):</strong> Determine the built-in potential of the junction.</li>
+                                <li><strong>Electric Field (E):</strong> Examine the electric field distribution.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        
 			
 			
 <!-- end instruction   -->
@@ -309,187 +525,71 @@ MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 
 
 
+    <form name="data">
+        <table>
+            <tbody>
+                <tr>
+                    <td><label for="na">\( N_A = \)</label></td>
+                    <td><input type="text" name="na" value="1E15"></td>
+                    <td>1/cm³</td>
 
-<form name="data">
-<table align="center" style="border-collapse:collapse"><tbody>
-<tr>
-    <td>
-        <p class="t" style="text-align:right">
-            <span id="MathJax-Element-21-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns='http://www.w3.org/1998/Math/MathML'><msub><mi>N</mi><mi>A</mi></msub></math>" role="presentation">
-                <span class="mjx-math" aria-hidden="true">
-                    <span class="mjx-mrow">
-                        <span class="mjx-msubsup">
-                            <span class="mjx-base">
-                                <span class="mjx-mi">N</span>
-                            </span>
-                            <span class="mjx-sub" style="font-size: 70.7%;">A</span>
-                        </span>
-                    </span>
-                </span>
-            </span>
-            <script type="math/tex" id="MathJax-Element-21">N_A</script>&nbsp;=
-        </p>
-    </td>
-    <td><input type="text" name="na" size="10" value="1E15" spellcheck="false" data-ms-editor="true"></td>
-    <td> 1/cm³</td>
-    <td>
-        <p class="t" style="text-align:right">
-            <span id="MathJax-Element-22-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns='http://www.w3.org/1998/Math/MathML'><msub><mi>N</mi><mi>D</mi></msub></math>" role="presentation">
-                <span class="mjx-math" aria-hidden="true">
-                    <span class="mjx-mrow">
-                        <span class="mjx-msubsup">
-                            <span class="mjx-base">
-                                <span class="mjx-mi">N</span>
-                            </span>
-                            <span class="mjx-sub" style="font-size: 70.7%;">D</span>
-                        </span>
-                    </span>
-                </span>
-            </span>
-            <script type="math/tex" id="MathJax-Element-22">N_D</script>&nbsp;=
-        </p>
-    </td>
-    <td><input type="text" name="nd" size="10" value="1E15" spellcheck="false" data-ms-editor="true"></td>
-    <td> 1/cm³</td>
-    <td>
-        <span id="MathJax-Element-23-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="<math xmlns='http://www.w3.org/1998/Math/MathML'><msub><mi>E</mi><mi>g</mi></msub></math>" role="presentation">
-            <span class="mjx-math" aria-hidden="true">
-                <span class="mjx-mrow">
-                    <span class="mjx-msubsup">
-                        <span class="mjx-base">
-                            <span class="mjx-mi">E</span>
-                        </span>
-                        <span class="mjx-sub" style="font-size: 70.7%;">g</span>
-                    </span>
-                </span>
-            </span>
-        </span>
-        <script type="math/tex" id="MathJax-Element-23">E_g</script>&nbsp;=
-    </td>
-    <td colspan="5">
-        <input type="text" name="Eg" size="30" value="1.166-4.73E-4*T*T/(T+636)" spellcheck="false" data-ms-editor="true"> eV
-    </td>
-</tr>
+                    <td><label for="nd">\( N_D = \)</label></td>
+                    <td><input type="text" name="nd" value="1E15"></td>
+                    <td>1/cm³</td>
+                </tr>
+                <tr>
+                    <td><label for="Eg">\( E_g = \)</label></td>
+                    <td colspan="5"><input type="text" name="Eg" value="1.166-4.73E-4*T*T/(T+636)"> eV</td>
+                </tr>
+                <tr>
+                    <td><label for="Nv">\( N_v(300) = \)</label></td>
+                    <td><input type="text" name="Nv" value="9.84E18"></td>
+                    <td>1/cm³</td>
 
+                    <td><label for="Nc">\( N_c(300) = \)</label></td>
+                    <td><input type="text" name="Nc" value="2.78E19"></td>
+                    <td>1/cm³</td>
+                </tr>
+                <tr>
+                    <td><label for="eps">\( \epsilon_r = \)</label></td>
+                    <td><input type="text" name="eps" value="12"></td>
+                    <td></td>
 
-<tr>
-  <td>
-    <p class="t" style="text-align:right">
-      <span id="MathJax-Element-24-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" role="presentation">
-        <script type="math/tex" id="MathJax-Element-24">N_v(300)</script>
-        \(N_v(300) =\)
-      </span>
-    </p>
-  </td>
-  <td>
-    <input type="text" name="Nv" size="10" value="9.84E18" spellcheck="false" data-ms-editor="true">
-  </td>
-  <td>1/cm³</td>
-  
-  <td>
-    <p class="t" style="text-align:right">
-      <span id="MathJax-Element-25-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" role="presentation">
-        <script type="math/tex" id="MathJax-Element-25">N_c(300)</script>
-        \(N_c(300) =\)
-      </span>
-    </p>
-  </td>
-  <td>
-    <input type="text" name="Nc" size="10" value="2.78E19" spellcheck="false" data-ms-editor="true">
-  </td>
-  <td>1/cm³</td>
+                    <td><label for="T">\( T = \)</label></td>
+                    <td><input type="text" name="T" value="300"></td>
+                    <td>K</td>
+                </tr>
+                <tr>
+                    <td><label for="mup">\( \mu_p = \)</label></td>
+                    <td><input type="text" name="mup" value="480"></td>
+                    <td>cm²/V s</td>
 
-  <td>
-    <p class="t" style="text-align:right">
-      <span id="MathJax-Element-26-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" role="presentation">
-        <script type="math/tex" id="MathJax-Element-26">\epsilon_r</script>
-        \(\epsilon_r =\)
-      </span>
-    </p>
-  </td>
-  <td>
-    <input type="text" name="eps" size="10" value="12" spellcheck="false" data-ms-editor="true">
-  </td>
-  <td></td>
+                    <td><label for="mun">\( \mu_n = \)</label></td>
+                    <td><input type="text" name="mun" value="1350"></td>
+                    <td>cm²/V s</td>
+                </tr>
+                <tr>
+                    <td><label for="taup">\( \tau_p = \)</label></td>
+                    <td><input type="text" name="taup" value="1E-10"></td>
+                    <td>s</td>
 
-  <td>
-    <p class="t" style="text-align:right">
-      <span id="MathJax-Element-27-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" role="presentation">
-        <script type="math/tex" id="MathJax-Element-27">T</script>
-        \(T =\)
-      </span>
-    </p>
-  </td>
-  <td>
-    <input type="text" name="T" size="10" value="300" spellcheck="false" data-ms-editor="true">
-  </td>
-  <td>K</td>
-</tr>
+                    <td><label for="taun">\( \tau_n = \)</label></td>
+                    <td><input type="text" name="taun" value="1E-10"></td>
+                    <td>s</td>
+                </tr>
+            </tbody>
+        </table>
 
+        <div class="form-row">
+            <label for="V">\( V = \)</label>
+            <input type="text" id="V" name="V" value="-0.5"> V
+            <input type="range" id="slide_V" name="slide_V" min="-2" max="1.1" step="0.01" value="-0.5" onchange="data.V.value = this.value; abrupt();"> 
+        </div>
 
-<tr>
-    <td>
-        <p class="t" style="text-align:right">
-            \(\mu_p =\)
-        </p>
-    </td>
-    <td>
-        <input type="text" name="mup" size="10" value="480" spellcheck="false">
-    </td>
-    <td>cm²/V s</td>
+        <br>
+        <input type="button" class="submit-btn" value="Submit" onclick="abrupt();">
+    </form>
 
-    <td>
-        <p class="t" style="text-align:right">
-            \(\mu_n =\)
-        </p>
-    </td>
-    <td>
-        <input type="text" name="mun" size="10" value="1350" spellcheck="false">
-    </td>
-    <td>cm²/V s</td>
-
-    <td>
-        <p class="t" style="text-align:right">
-            \(\tau_p =\)
-        </p>
-    </td>
-    <td>
-        <input type="text" name="taup" size="10" value="1E-10" spellcheck="false">
-    </td>
-    <td>s</td>
-
-    <td>
-        <p class="t" style="text-align:right">
-            \(\tau_n =\)
-        </p>
-    </td>
-    <td>
-        <input type="text" name="taun" size="10" value="1E-10" spellcheck="false">
-    </td>
-    <td>s</td>
-</tr>
-
-</tbody></table>
-
-<table align="center" style="border-collapse: collapse;">
-    <tbody>
-        <tr>
-            <td style="text-align: center;">
-                <label for="V">
-                    \( V = \)
-                </label>
-                <input type="text" id="V" name="V" size="10" value="-0.5" spellcheck="false"> V
-                <br>
-                <input type="range" id="slide_V" name="slide_V" min="-2" max="1.1" step="0.01" value="-0.5" onchange="data.V.value = this.value; abrupt();"> V
-            </td>
-            <td>
-                <input type="button" value="Submit" onclick="abrupt();">
-            </td>
-        </tr>
-    </tbody>
-</table>
- 
-</form>
 
 <p class="t" style="text-align: center;">
     <span>
@@ -692,79 +792,7 @@ MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
 </td>
 
 <td>
-    <p class="t" style="text-align:center"><b>Current-Voltage Characteristics</b></p>
-    <table align="center">
-        <tbody>
-            <tr>
-                <td>&#8195;<span class="MathJax_Preview" style="color: inherit; display: none;"></span>
-                    <span id="MathJax-Element-46-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;mi&gt;I&lt;/mi&gt;&lt;mrow&gt;&lt;msup&gt;&lt;mn&gt;10&lt;/mn&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;/msup&gt;&lt;msub&gt;&lt;mi&gt;I&lt;/mi&gt;&lt;mi&gt;S&lt;/mi&gt;&lt;/msub&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/math&gt;" role="presentation" style="font-size: 101%;">
-                        <span id="MJXc-Node-822" class="mjx-math" aria-hidden="true">
-                            <span class="mjx-mfrac">
-                                <span class="mjx-numerator"><span id="MJXc-Node-825" class="mjx-mi">I</span></span>
-                                <span class="mjx-denominator">
-                                    <span class="mjx-msup"><span class="mjx-mn">10</span><span class="mjx-mn">5</span></span>
-                                    <span class="mjx-msub"><span class="mjx-mi">I</span><span class="mjx-mi">S</span></span>
-                                </span>
-                            </span>
-                        </span>
-                        <!-- <script type="math/tex" >\frac{I}{10<sup>5</sup> I<sub>S</sub>}</script> -->
-						<div style="display: flex; justify-content: center; align-items: center; font-size: larger;">
-							<span>I</span>
-							<span style="margin: 0 5px;">&#8260;</span>
-							<span style="font-size: smaller;">10<sup>5</sup> I<sub>S</sub></span>
-						</div>
-
-                </td>
-                <td>
-                    <div id="placeholderiv" style="width: 400px; height: 300px; position: relative;">
-                        <canvas class="flot-base" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                        <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: #545454;">
-                            <div class="flot-x-axis xAxis">
-                                <div class="flot-tick-label" style="position: absolute; left: 18px;">-2.0</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 78px;">-1.5</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 138px;">-1.0</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 198px;">-0.5</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 260px;">0.0</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 320px;">0.5</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 381px;">1.0</div>
-                            </div>
-                            <div class="flot-y-axis yAxis">
-                                <div class="flot-tick-label" style="position: absolute; top: 269px;">-1.0</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 202px;">-0.5</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 135px;">0.0</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 67px;">0.5</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 0;">1.0</div>
-                            </div>
-                        </div>
-                        <canvas class="flot-overlay" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <p class="t" style="text-align:center">
-                        <span class="MathJax_Preview" style="color: inherit; display: none;"></span>
-                        <span id="MathJax-Element-47-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;V&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 101%;">
-                            <span id="MJXc-Node-833" class="mjx-math" aria-hidden="true">
-                                <span class="mjx-mi">V</span>
-                            </span>
-                            <span class="MJX_Assistive_MathML" role="presentation">
-                                <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math>
-                            </span>
-                            <script type="math/tex" id="MathJax-Element-47">V</script> [V]
-                        </span>
-                    </p>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</td>
-
-</tr>
-<tr>
-<td>
-    <p class="t" style="text-align:center"><b>Charge density</b></p>
+     <p class="t" style="text-align:center"><b>Charge density</b></p>
     <table>
         <tbody>
             <tr>
@@ -807,6 +835,8 @@ MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
     </table>
 </td>
 
+</tr>
+<tr>
 <td>
     <p class="t" style="text-align:center"><b>Electric field</b></p>
     <table align="center">
@@ -849,166 +879,8 @@ MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
     </table>
 </td>
 
-</tr><tr><td>&nbsp;</td></tr><tr>
 <td>
-    <p class="t" style="text-align:center"><b>Carrier Densities</b></p>
-    <table align="center">
-        <tbody>
-            <tr>
-                <td>
-                    <span id="MathJax-Element-48-Frame" class="mjx-chtml" role="presentation" style="font-size: 101%; position: relative;">
-                        <span class="mjx-math" aria-hidden="true">
-                            <span class="mjx-mi">n</span>
-                            <span class="mjx-mo">/</span>
-                            <span class="mjx-msub"><span class="mjx-mi">N</span><span class="mjx-mi">A</span></span>
-                        </span>
-                    </span>
-                    <script type="math/tex" id="MathJax-Element-48">n/N_A</script>
-                    <br>
-                    <span id="MathJax-Element-49-Frame" class="mjx-chtml" role="presentation" style="font-size: 101%; position: relative;">
-                        <span class="mjx-math" aria-hidden="true">
-                            <span class="mjx-mi">p</span>
-                            <span class="mjx-mo">/</span>
-                            <span class="mjx-msub"><span class="mjx-mi">N</span><span class="mjx-mi">A</span></span>
-                        </span>
-                    </span>
-                    <script type="math/tex" id="MathJax-Element-49">p/N_A</script>
-                </td>
-                <td>
-                    <div id="placeholder6" style="width: 400px; height: 300px; position: relative;">
-                        <canvas class="flot-base" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                        <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: #545454;">
-                            <div class="flot-x-axis xAxis" style="position: absolute; inset: 0; display: block;">
-                                <div class="flot-tick-label" style="position: absolute; left: 60px; text-align: center;">-3</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 155px; text-align: center;">-1</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 205px; text-align: center;">0</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 252px; text-align: center;">1</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 300px; text-align: center;">2</div>
-                                <div class="flot-tick-label" style="position: absolute; left: 347px; text-align: center;">3</div>
-                            </div>
-                            <div class="flot-y-axis yAxis" style="position: absolute; inset: 0; display: block;">
-                                <div class="flot-tick-label" style="position: absolute; top: 0; left: 2px; text-align: right;">1.2</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 45px; left: 2px; text-align: right;">1.0</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 90px; left: 2px; text-align: right;">0.8</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 135px; left: 2px; text-align: right;">0.6</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 179px; left: 2px; text-align: right;">0.4</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 224px; left: 2px; text-align: right;">0.2</div>
-                                <div class="flot-tick-label" style="position: absolute; top: 269px; left: 2px; text-align: right;">0.0</div>
-                            </div>
-                        </div>
-                        <canvas class="flot-overlay" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                        <div class="legend" style="position: absolute; top: 13px; right: 13px; font-size: smaller; color: #545454;">
-                            <div style="background-color: rgba(255, 255, 255, 0.85);">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="legendColorBox">
-                                                <div style="border:1px solid #ccc;padding:1px">
-                                                    <div style="width:4px;height:0;border:5px solid rgb(255, 0, 0);overflow:hidden"></div>
-                                                </div>
-                                            </td>
-                                            <td class="legendLabel">n</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="legendColorBox">
-                                                <div style="border:1px solid #ccc;padding:1px">
-                                                    <div style="width:4px;height:0;border:5px solid rgb(0, 0, 255);overflow:hidden"></div>
-                                                </div>
-                                            </td>
-                                            <td class="legendLabel">p</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <p class="t" style="text-align:center"><i>x</i> [&#956;m]</p>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</td>
-
-<td>
-    <p class="t" style="text-align:center"><b>log(Carrier Densities)</b></p>
-    <table align="center">
-        <tbody>
-            <tr>
-                <td>[1/cm³]</td>
-                <td>
-                    <div id="placeholder2" style="width: 400px; height: 300px; position: relative;">
-                        <canvas class="flot-base" width="400" height="300" style="position: absolute;"></canvas>
-                        <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: rgb(84, 84, 84);">
-                            <div class="flot-x-axis xAxis" style="position: absolute; inset: 0; display: block;">
-                                <div class="flot-tick-label" style="position: absolute; text-align: center;">0</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: center;">1</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: center;">2</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: center;">3</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: center;">-3</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: center;">-2</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: center;">-1</div>
-                            </div>
-                            <div class="flot-y-axis yAxis" style="position: absolute; inset: 0; display: block;">
-                                <div class="flot-tick-label" style="position: absolute; text-align: right;">0</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: right;">5</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: right;">10</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: right;">15</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: right;">20</div>
-                                <div class="flot-tick-label" style="position: absolute; text-align: right;">-5</div>
-                            </div>
-                        </div>
-                        <canvas class="flot-overlay" width="400" height="300" style="position: absolute;"></canvas>
-                        <div class="legend" style="position: absolute; top: 13px; right: 13px; background-color: rgb(255, 255, 255); opacity: 0.85;">
-                            <table style="font-size: smaller; color: #545454;">
-                                <tbody>
-                                    <tr>
-                                        <td class="legendColorBox">
-                                            <div style="border: 1px solid #ccc; padding: 1px;">
-                                                <div style="width: 4px; height: 0; border: 5px solid rgb(255, 0, 0); overflow: hidden;"></div>
-                                            </div>
-                                        </td>
-                                        <td class="legendLabel">n</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="legendColorBox">
-                                            <div style="border: 1px solid #ccc; padding: 1px;">
-                                                <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 255); overflow: hidden;"></div>
-                                            </div>
-                                        </td>
-                                        <td class="legendLabel">p</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="legendColorBox">
-                                            <div style="border: 1px solid #ccc; padding: 1px;">
-                                                <div style="width: 4px; height: 0; border: 5px solid rgb(150, 150, 150); overflow: hidden;"></div>
-                                            </div>
-                                        </td>
-                                        <td class="legendLabel">ni</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><p class="t" style="text-align:center"><i>x</i> [&#956;m]</p></td>
-            </tr>
-        </tbody>
-    </table>
-</td>
-
-</tr>
-
-<tr>
-<td>
-  <p class="t" style="text-align:center"><b>Capacitance - Voltage</b></p>
+    <p class="t" style="text-align:center"><b>Capacitance - Voltage</b></p>
   <table align="center">
     <tbody>
       <tr>
@@ -1067,75 +939,11 @@ MathJax.Hub.Queue(['Typeset',MathJax.Hub]);
   </table>
 </td>
 
-<td>
-
-<p class="t" style="text-align:center"><b>Current densities</b></p>
-
-<table align="center">
-    <tbody>
-        <tr>
-            <td>
-                <p style="text-align:center;">
-                    <span>j</span><br>
-                    <span>\(\left[\text{A/cm}^2\right]\)</span>
-                </p>
-            </td>
-            <td>
-                <div id="placeholderj" style="width: 400px; height: 300px; position: relative;">
-                    <canvas class="flot-base" width="400" height="300"></canvas>
-                    <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: rgb(84, 84, 84);">
-                        <div class="flot-x-axis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label" style="position: absolute; left: 66px;">-3</div>
-                            <div class="flot-tick-label" style="position: absolute; left: 112px;">-2</div>
-                            <div class="flot-tick-label" style="position: absolute; left: 159px;">-1</div>
-                            <div class="flot-tick-label" style="position: absolute; left: 208px;">0</div>
-                            <div class="flot-tick-label" style="position: absolute; left: 255px;">1</div>
-                            <div class="flot-tick-label" style="position: absolute; left: 301px;">2</div>
-                            <div class="flot-tick-label" style="position: absolute; left: 348px;">3</div>
-                        </div>
-                        <div class="flot-y-axis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label" style="position: absolute; top: 0; left: 6px;">300</div>
-                            <div class="flot-tick-label" style="position: absolute; top: 45px; left: 6px;">200</div>
-                            <div class="flot-tick-label" style="position: absolute; top: 90px; left: 6px;">100</div>
-                            <div class="flot-tick-label" style="position: absolute; top: 135px; left: 6px;">0</div>
-                            <div class="flot-tick-label" style="position: absolute; top: 179px; left: 2px;">-100</div>
-                            <div class="flot-tick-label" style="position: absolute; top: 224px; left: 2px;">-200</div>
-                            <div class="flot-tick-label" style="position: absolute; top: 269px; left: 2px;">-300</div>
-                        </div>
-                    </div>
-                    <canvas class="flot-overlay" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                    <div class="legend" style="position: absolute; top: 13px; right: 13px; background-color: rgba(255, 255, 255, 0.85);">
-                        <table style="font-size: smaller; color: #545454;">
-                            <tbody>
-                                <tr>
-                                    <td class="legendColorBox"><div style="border: 1px solid #ccc; padding: 1px;"><div style="width: 4px; height: 0; border: 5px solid rgb(200, 0, 0); overflow: hidden;"></div></div></td>
-                                    <td class="legendLabel">electron drift</td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox"><div style="border: 1px solid #ccc; padding: 1px;"><div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 200); overflow: hidden;"></div></div></td>
-                                    <td class="legendLabel">hole drift</td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox"><div style="border: 1px solid #ccc; padding: 1px;"><div style="width: 4px; height: 0; border: 5px solid rgb(255, 150, 150); overflow: hidden;"></div></div></td>
-                                    <td class="legendLabel">electron diffusion</td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox"><div style="border: 1px solid #ccc; padding: 1px;"><div style="width: 4px; height: 0; border: 5px solid rgb(150, 150, 255); overflow: hidden;"></div></div></td>
-                                    <td class="legendLabel">hole diffusion</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<tr><td></td><td><p class="t" style="text-align:center"><i>x</i> [&#956;m]</p></td></tr></tbody></table>
+</tr><tr><td>&nbsp;</td></tr>
 
 
-</td></tr></tbody></table>
+
+</tbody></table>
 
 </div>
    <!--simulation end -->
